@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" updateCheck="true">
+
+    <diskStore path="D:/ehcache"/>
+
+    <!--
+        缓存管理器监听器：用于监听缓存管理器中缓存的增删，并不是缓存的增删改（如：@Cacheable、@CacheEvict等）。若未指定，则使用默认的。
+        - class：自定义工厂的全类名
+        - properties：特殊配置
+        - propertySeparator：多个配置的分隔符，默认逗号
+      -->
+    <!--<cacheManagerEventListenerFactory class="com.soda.common.factory.MyCacheManagerEventListenerFactory"/>-->
+
+    <!--
+        编程式缓存使用的缓存配置
+        - cacheLoaderTimeoutMillis：CacheLoader执行超时的时间，默认0（不超时）
+        - maxEntriesLocalHeap：最大缓存数量，默认0（无数个）
+        -
+      -->
+    <defaultCache cacheLoaderTimeoutMillis="0" clearOnFlush="false" copyOnRead="true" copyOnWrite="true" diskAccessStripes="1"
+                  diskExpiryThreadIntervalSeconds="" diskPersistent="true" diskSpoolBufferSizeMB="" eternal="false" maxElementsInMemory=""
+                  maxElementsOnDisk="" maxEntriesLocalDisk="10000000" maxEntriesLocalHeap="" maxMemoryOffHeap=""
+                  memoryStoreEvictionPolicy="LRU" overflowToDisk="true" overflowToOffHeap="true" statistics="true"
+                  timeToIdleSeconds="120" timeToLiveSeconds="10" transactionalMode="local"
+    ></defaultCache>
+
+    <cache name="user"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LRU"
+    >
+
+        <!--<cacheEventListenerFactory class="com.soda.common.cache.MyCacheEventListenerFactory" listenFor="local"/>-->
+        <!--<cacheEventListenerFactory class=""/>-->
+
+    </cache>
+
+    <!--
+        缓存管理器对等监听器：用于分布式
+        - class：自定义工厂的全类名
+        - properties：特殊配置
+        - propertySeparator：多个配置的分隔符，默认逗号
+      -->
+    <!--<cacheManagerPeerListenerFactory class="" properties="" propertySeparator=""/>-->
+
+    <!--
+        提供服务来定位CacheManagerPeerListener监听的对等体
+        - class：自定义工厂的全类名
+        - properties：特殊配置
+        - propertySeparator：多个配置的分隔符，默认逗号
+      -->
+    <!--<cacheManagerPeerProviderFactory class="" properties="" propertySeparator=""/>-->
+
+    <!--
+        管理REST服务
+      -->
+    <!--<managementRESTService bind="" enabled="false" needClientAuth="true"-->
+
+    <!--sampleHistorySize="" sampleIntervalSeconds="" sampleSearchIntervalSeconds=""-->
+
+    <!--securityServiceLocation="" securityServiceTimeout="" sslEnabled="true"/>-->
+
+    <!--<sizeOfPolicy maxDepth="" maxDepthExceededBehavior="continue"/>-->
+
+    <!--Terracotta集群Ehcache的配置-->
+    <!--<terracottaConfig rejoin="false" url="localhost:9510" wanEnabledTSA="false"></terracottaConfig>-->
+
+    <!--<transactionManagerLookup class="" properties="" propertySeparator=""/>-->
+
+</ehcache>

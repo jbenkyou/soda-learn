@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd
+            http://www.springframework.org/schema/task
+            http://www.springframework.org/schema/task/spring-task.xsd
+            http://www.springframework.org/schema/cache
+            http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <context:component-scan base-package="com.soda.app"
+                            name-generator="com.soda.common.bootstrap.AppAnnotationBeanNameGenerator"/>
+
+    <!--***********************************************************************************************-->
+    <!--数据库部分-->
+
+    <!--配置数据源druid-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${url}"/>
+        <property name="username" value="${user}"/>
+        <property name="password" value="${password}"/>
+        <!--最大连接数-->
+        <property name="maxActive" value="${maxActive}"/>
+    </bean>
+
+    <!--配置ORM的session工厂-->
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--指定数据源-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--配置Mybatis专属属性-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!--配置Mapper.xml所在位置-->
+        <property name="mapperLocations" value="classpath*:com/soda/app/mapper/*Mapper.xml"/>
+    </bean>
+
+    <!--自动扫描MyBatis相关的接口，并添加sessionFactory-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--扫描的包-->
+        <property name="basePackage" value="com.soda.app.mapper"/>
+        <!--session工厂-->
+        <property name="sqlSessionFactoryBeanName" value="sessionFactory"/>
+    </bean>
+
+    <!--***********************************************************************************************-->
+    <!--事务-->
+
+    <!--配置某数据源的事务管理器-->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--配置事务的通知-->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="add*"/>
+            <tx:method name="save*"/>
+            <tx:method name="update*"/>
+            <tx:method name="modify*"/>
+            <tx:method name="del*"/>
+            <tx:method name="rm*"/>
+            <tx:method name="batch*"/>
+            <tx:method name="*" read-only="true" propagation="SUPPORTS"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--配置事务的切点-->
+    <aop:config>
+        <aop:pointcut id="txPointcut" expression="execution(!static * com.soda.app.service.impl.*ServiceImpl.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+    </aop:config>
+
+    <!--***********************************************************************************************-->
+    <!--定时任务-->
+
+    <task:annotation-driven/>
+
+    <!--***********************************************************************************************-->
+    <!--缓存-->
+
+    <cache:annotation-driven/>
+
+    <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"/>
+    </bean>
+
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehcache"/>
+    </bean>
+
+</beans>

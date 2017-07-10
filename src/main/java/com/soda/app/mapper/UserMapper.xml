@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.soda.app.mapper.UserMapper">
+
+    <resultMap id="userRM" type="com.soda.app.model.User">
+        <id column="id" property="id" jdbcType="INTEGER" javaType="Integer"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="status" property="status"/>
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIME" javaType="java.util.Date"/>
+    </resultMap>
+
+    <select id="listUser" resultMap="userRM">
+        SELECT * FROM user;
+    </select>
+
+</mapper>

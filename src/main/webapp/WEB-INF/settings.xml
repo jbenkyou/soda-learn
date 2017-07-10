@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <localRepository>D:/Dev/Repository</localRepository>
+
+    <profiles>
+        <profile>
+          <id>profile-nexus</id>
+          <repositories>
+            <repository>
+              <id>nexus-ali</id>
+              <name>aliyun repository</name>
+              <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            </repository>
+            <repository>
+              <id>nexus-ibi</id>
+              <name>ibiblio repository</name>
+              <url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
+            </repository>
+            <repository>
+              <id>nexus-apache</id>
+              <name>apache repository</name>
+              <url>https://repo.maven.apache.org/maven2</url>
+            </repository>
+          </repositories>
+        </profile>
+    </profiles>
+	
+	<activeProfiles>
+	    <activeProfile>profile-nexus</activeProfile>
+	</activeProfiles>
+
+	<!--
+    <mirrors>
+        <mirror>
+            <id>ali</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <mirrorOf>central</mirrorOf>
+        </mirror>
+    </mirrors>
+	-->
+	
+</settings>
